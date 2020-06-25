@@ -1,4 +1,4 @@
-import * as postAPI from '../api/posts';
+import * as postsAPI from '../api/posts';
 import { reducerUtils, createPromiseThunk, handleAsyncActions } from '../lib/asyncUtils';
 
 const GET_POSTS = 'GET_POSTS';
@@ -9,8 +9,8 @@ const GET_POST = 'GET_POST';
 const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
 const GET_POST_ERROR = 'GET_POST_ERROR';
 
-export const getPosts = createPromiseThunk(GET_POSTS, postAPI.getPosts);
-export const getPost = createPromiseThunk(GET_POST, postAPI.getPostById);
+export const getPosts = createPromiseThunk(GET_POSTS, postsAPI.getPosts);
+export const getPost = createPromiseThunk(GET_POST, postsAPI.getPostById);
 
 const initialState = {
     posts: reducerUtils.initial(),

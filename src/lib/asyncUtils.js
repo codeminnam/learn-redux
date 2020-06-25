@@ -2,13 +2,13 @@ export const createPromiseThunk = (type, promiseCreator) => {
     const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
 
     return param => async dispatch => {
-        dispatch({ type });
+        dispatch({ type, param });
         try {
             const payload = await promiseCreator(param);
             dispatch({
                 type: SUCCESS,
                 payload
-            })
+            });
         } catch (e) {
             dispatch({
                 type: ERROR,
@@ -19,6 +19,29 @@ export const createPromiseThunk = (type, promiseCreator) => {
     };
 };
 
+export const reducerUtils = {
+    initial: (initialData = null) => ({
+        loading: false,
+        data: initialData,
+        error: null
+    }),
+    loading: (prevState = null) => ({
+        loading: true,
+        data: prevState,
+        error: null
+    }),
+    success: payload => ({
+        loading: false,
+        data: payload,
+        error: null
+    }),
+    error: (error) => ({
+        loading: false,
+        data: null,
+        error: error
+    })
+}
+
 export const handleAsyncActions = (type, key) => {
     const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
     return (state, action) => {
@@ -26,43 +49,21 @@ export const handleAsyncActions = (type, key) => {
             case type:
                 return {
                     ...state,
-                    [key]: reducerUtils.loading(),
+                    [key]: reducerUtils.loading()
                 }
             case SUCCESS:
                 return {
                     ...state,
-                    [key]: reducerUtils.success(action.payload),
+                    [key]: reducerUtils.success(action.payload)
                 }
             case ERROR:
                 return {
                     ...state,
-                    [key]: reducerUtils.error(action.payload),
+                    [key]: reducerUtils.error(action.payload)
                 }
             default:
                 return state;
         }
-    }
-}
+    };
+};
 
-export const reducerUtils = {
-    initial: (data = null) => ({
-        data,
-        loading: false,
-        error: null
-    }),
-    loading: (prevState = null) => ({
-        data: prevState,
-        loading: true,
-        error: null
-    }),
-    success: (data) => ({
-        data,
-        loading: false,
-        error: null
-    }),
-    error: (error) => ({
-        data: null,
-        loading: false,
-        error
-    })
-}
