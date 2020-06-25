@@ -28,7 +28,7 @@ export const getPosts = () => async dispatch => {
 export const getPost = (id) => async dispatch => {
     dispatch({ type: GET_POST });
     try {
-        const posts = await postsAPI.getPost(id);
+        const post = await postsAPI.getPostById(id);
         dispatch({
             type: GET_POST_SUCCESS,
             post
