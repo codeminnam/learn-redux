@@ -6,7 +6,7 @@ import {
     createPromiseSaga,
     createPromiseSagaById
 } from '../lib/asyncUtils';
-import { call, put, takeEvery, getContext } from 'redux-saga/effects';
+import { takeEvery, getContext, select } from 'redux-saga/effects';
 
 const GET_POSTS = 'GET_POSTS';
 const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
@@ -18,6 +18,8 @@ const GET_POST_ERROR = 'GET_POST_ERROR';
 
 const GO_HOME = 'GO_HOME';
 
+const PRINT_STATE = 'PRINT_STATE';
+
 export const getPosts = () => ({ type: GET_POSTS });
 export const getPost = id => ({
     type: GET_POST,
@@ -25,11 +27,18 @@ export const getPost = id => ({
     meta: id
 });
 
+export const printState = () => ({ type: PRINT_STATE });
+
 const getPostsSaga = createPromiseSaga(GET_POSTS, postsAPI.getPosts);
 const getPostSaga = createPromiseSagaById(GET_POST, postsAPI.getPostById);
 function* goHomeSaga() {
     const history = yield getContext('history');
     history.push('/');
+}
+
+function* printStateSaga() {
+    const state = yield select(state => state.posts);
+    console.log(state);
 }
 
 // function* getPostsSaga() {
@@ -71,6 +80,7 @@ export function* postsSaga() {
     yield takeEvery(GET_POSTS, getPostsSaga);
     yield takeEvery(GET_POST, getPostSaga);
     yield takeEvery(GO_HOME, goHomeSaga);
+    yield takeEvery(PRINT_STATE, printStateSaga);
 }
 
 export const goHome = () => ({ type: GO_HOME });
