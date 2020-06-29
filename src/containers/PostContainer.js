@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Post from '../components/Post';
-import { getPost, goToHome } from '../modules/posts';
+import { getPost, goHome } from '../modules/posts';
 import { reducerUtils } from '../lib/asyncUtils';
 
 function PostContainer({ postId }) {
@@ -21,7 +21,7 @@ function PostContainer({ postId }) {
 
     return (
         <>
-            <button onClick={() => dispatch(goToHome())}>홈으로 이동</button>
+            <button onClick={() => dispatch(goHome())}>홈으로 이동</button>
             <Post post={data} />
         </>
     );
